@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 
 
@@ -988,3 +989,7 @@
   </body>
 </html>
 
+=======
+# LayerFeatureLabeler
+A QGIS plugin to label vector layer features
+>>>>>>> 88a6b76854e9c9e83b1f59583bda698e4e7aa63b
