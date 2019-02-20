@@ -30,7 +30,7 @@ if False:
     from qgis.gui import *
 if True:
     from qgis.PyQt.QtGui import QColor, QIcon, QBrush
-    from qgis.PyQt.QtWidgets import QComboBox, QDockWidget, QAction, QTableWidgetItem, QApplication
+    from qgis.PyQt.QtWidgets import QComboBox, QDockWidget, QAction, QTableWidgetItem, QApplication, QHeaderView
     from qgis.PyQt import uic
     from qgis.core import QgsMapLayer
     from qgis.gui import QgsRubberBand
@@ -64,7 +64,7 @@ class AttributePainterClass:
             QIcon(os.path.join(self.plugin_dir,"icons/select.png")),
             # the following does not seem to work anymore, maybe since PyQt5?!
             #QIcon(':/plugins/LayerFeatureLabeler/icons/select.png'),
-            u"AttributePainter", self.iface.mainWindow())
+            u"LayerFeatureLabeler", self.iface.mainWindow())
         # connect the action to the run method
         self.action.triggered.connect(self.run)
 
@@ -98,14 +98,18 @@ class AttributePainterClass:
         except:
             #QGIS3 API
             self.iface.currentLayerChanged.connect(self.checkOnLayerChange)
-        self.iface.addDockWidget( Qt.LeftDockWidgetArea, self.apdockwidget )
+        self.iface.addDockWidget( Qt.RightDockWidgetArea, self.apdockwidget )
         self.iface.projectRead.connect(self.resetSource)
         self.iface.newProjectCreated.connect(self.resetSource)
         self.canvas.mapToolSet.connect(self.toggleMapTool)
-        self.sourceMapTool = IdentifyGeometry(self.canvas,pickMode='selection')
+
+        # here the map tool is choosen
+        self.sourceMapTool = IdentifyGeometry(self.canvas,pickMode='active')
         self.destinationMapTool = IdentifyGeometry(self.canvas,pickMode='active')
+        # here the feature is selected
         self.sourceMapTool.geomIdentified.connect(self.setSourceFeature)
         self.destinationMapTool.geomIdentified.connect(self.setDestinationFeature)
+
         #Call reset procedure to initialize widget
         self.dock.tableWidget.itemChanged.connect(self.highLightCellOverride)
         self.resetSource()
@@ -131,7 +135,15 @@ class AttributePainterClass:
         header = QTableWidgetItem("VALUE")
         header.setTextAlignment(Qt.AlignLeft)
         self.dock.tableWidget.setHorizontalHeaderItem(2,header)
-        self.dock.tableWidget.resizeColumnsToContents()
+        # self.dock.tableWidget.resizeColumnsToContents()
+        try:
+            self.dock.tableWidget.horizontalHeader().setResizeMode(QHeaderView.Stretch)
+        except:
+            self.dock.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+        self.height = 30
+        self.dock.tableWidget.verticalHeader().setDefaultSectionSize(self.height)
+
 
     def setComboField(self,content,type,layer):
         '''

@@ -57,3 +57,6 @@ class IdentifyGeometry(QgsMapToolIdentify):
         if len(results) > 0:
             self.geomIdentified.emit(results[0].mLayer, QgsFeature(results[0].mFeature))
 
+
+        # TODO: simlpy select selected layer here
+
