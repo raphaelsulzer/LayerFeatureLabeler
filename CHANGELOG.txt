@@ -1,0 +1,28 @@
+v1
+Emission
+
+v1.1 (12/6/2014)
+The plugin now allows to override the attributes values 
+simply editing the related cell. 
+Overridden attributes are highlighted on selection table
+
+v2.0 (7/11/2014)
+Edit buffer support
+Copy attributes between different layers
+Apply Attributes by names
+Highlight attribute compatibility
+
+v3.0 (12/06/2015)
+Pick to select sample feature directly on canvas
+
+v4.0 (13/04/2016)
+Fields mapping feature
+Pick to apply feature
+Persistent layer settings during session
+
+v5.0 (02/03/2017)
+QGIS3 migration
+
+v5.1 (20/04/2018)
+QGIS3 unknown method issue fixed
+highlight feature on applying attributes
