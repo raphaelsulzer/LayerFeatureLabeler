@@ -9,7 +9,7 @@
 
 
 [general]
-name=Attribute Labeler
+name=Layer Feature Labeler
 qgisMinimumVersion=2.18
 qgisMaximumVersion=3.99
 description=Plugin for easy replication of attributes values between features

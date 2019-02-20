@@ -61,8 +61,9 @@ class AttributePainterClass:
     def initGui(self):
         # Create action that will show plugin widget
         self.action = QAction(
-            #QIcon(os.path.join(self.plugin_dir,"icon.png")),
-            QIcon(':/plugins/PlanningToolClass/icons/select.png'),
+            QIcon(os.path.join(self.plugin_dir,"icons/select.png")),
+            # the following does not seem to work anymore, maybe since PyQt5?!
+            #QIcon(':/plugins/LayerFeatureLabeler/icons/select.png'),
             u"AttributePainter", self.iface.mainWindow())
         # connect the action to the run method
         self.action.triggered.connect(self.run)
