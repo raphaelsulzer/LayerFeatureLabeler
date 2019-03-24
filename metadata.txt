@@ -46,7 +46,7 @@ tags = fields, attributes, copy, replication, vector, layer, apply, edit, table
 homepage=http://geogear.wordpress.com/
 tracker=https://github.com/enricofer/attributepainter/issues
 repository=https://github.com/enricofer/attributepainter/
-icon=icons/select.png
+icon=icons/select2.png
 # experimental flag
 experimental=False
 
