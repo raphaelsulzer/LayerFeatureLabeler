@@ -44,6 +44,8 @@ from qgis.PyQt import uic
 from qgis.core import *
 from qgis.gui import QgsRubberBand
 
+
+
 #version
 version = int(str(Qgis.QGIS_VERSION[0]))
 
@@ -51,6 +53,9 @@ version = int(str(Qgis.QGIS_VERSION[0]))
 # Import the code for the dialog
 from .attributepainterdialog import attributePainterDialog
 from .identifygeometry import IdentifyGeometry
+from . import utility_functions as uf
+
+
 # Initialize Qt resources from file resources.py
 import sip
 import os
@@ -70,6 +75,13 @@ class AttributePainterClass:
         self.sourceEvid = QgsRubberBand(self.canvas)
         self.sourceEvid.setColor(colorSource)
         self.sourceEvid.setWidth(3)
+
+        self.loadProjectFile()
+
+
+
+
+
 
 
     def initGui(self):
@@ -97,7 +109,7 @@ class AttributePainterClass:
 
         #init the combo boxes
         self.initLayerCombo()
-        self.initAttributeCombo()
+
 
 
         #setting dock view buttons behavior
@@ -136,6 +148,38 @@ class AttributePainterClass:
         self.actualLayer = None
 
 
+
+        #connect signals
+        self.dock.layerCombo.currentIndexChanged.connect(self.layerComboChanged)
+
+    def layerComboChanged(self):
+
+        text = str(self.dock.layerCombo.currentText())
+        activeLayer = uf.getCanvasLayerByName(self.canvas, text)
+        self.iface.setActiveLayer(activeLayer)
+
+        self.initAttributeCombo(activeLayer)
+
+
+    def loadProjectFile(self):
+
+        # open the QGIS project file
+        scenario_open = False
+        scenario_file = os.path.join(os.path.dirname(__file__),'data', 'project.qgs')
+
+
+        # check if file exists
+        if os.path.isfile(scenario_file):
+            self.iface.addProject(scenario_file)
+            scenario_open = True
+        else:
+            last_dir = uf.getLastDir("PlanningToolClass")
+            new_file = QtWidgets.QFileDialog.getOpenFileName(self, "", last_dir, "(*.qgs)")
+            if new_file:
+                self.iface.addProject(unicode(new_file))
+                scenario_open = True
+
+
     def initLayerCombo(self):
 
         #QGIS2
@@ -152,20 +196,29 @@ class AttributePainterClass:
         self.dock.layerCombo.clear()
         self.dock.layerCombo.addItems(layerList)
 
-        # TODO: select selected layer
+        self.layerComboChanged()
 
-    def initAttributeCombo(self):
+
+    def initAttributeCombo(self, layer):
+
+
 
         #QGIS2
-        layer = self.iface.activeLayer()
         #fields = layer.pendingFields()
-        fields = layer.fields()
-        fieldList = [field.name() for field in fields]
+        if layer:
+            fields = layer.fields()
+        # if version == 2:
+        #     fields = layer.pendingFields()
+        # elif version == 3:
+        #     fields = layer.fields()
+        # else:
+        #     print('unknown QGIS version')
+            fieldList = [field.name() for field in fields]
         #QGIS3
         #QgsProject.instance().addMapLayer(your_Qgs_whaterver_Layer)
 
-        self.dock.attributeCombo.clear()
-        self.dock.attributeCombo.addItems(fieldList)
+            self.dock.attributeCombo.clear()
+            self.dock.attributeCombo.addItems(fieldList)
 
 
 

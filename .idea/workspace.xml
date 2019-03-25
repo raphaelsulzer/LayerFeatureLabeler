@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="68deee1d-8dd7-4dd5-ba66-138bd38724d9" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/europe_nuts.dbf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/europe_nuts.prj" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/europe_nuts.shp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/europe_nuts.shx" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LayerFeatureLabeler.zip" afterPath="$PROJECT_DIR$/LayerFeatureLabeler.zip" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/departement.dbf" afterPath="$PROJECT_DIR$/data/departement.dbf" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/attributepainter.py" afterPath="$PROJECT_DIR$/attributepainter.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ui_LayerFeatureLabeler.ui" afterPath="$PROJECT_DIR$/ui_LayerFeatureLabeler.ui" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pb_tool.cfg" afterPath="$PROJECT_DIR$/pb_tool.cfg" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,13 +21,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="attributepainter.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="attributepainter.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/attributepainter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="379">
-              <caret line="169" column="0" lean-forward="true" selection-start-line="169" selection-start-column="0" selection-end-line="169" selection-end-column="0" />
+            <state relative-caret-position="-481">
+              <caret line="86" column="13" lean-forward="false" selection-start-line="86" selection-start-column="8" selection-end-line="86" selection-end-column="13" />
               <folding>
-                <element signature="e#9142#9167#0" expanded="false" />
+                <element signature="e#10369#10394#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -61,11 +67,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pb_tool.cfg" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pb_tool.cfg" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pb_tool.cfg">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="43" column="1" lean-forward="false" selection-start-line="43" selection-start-column="1" selection-end-line="43" selection-end-column="1" />
+            <state relative-caret-position="155">
+              <caret line="42" column="1" lean-forward="false" selection-start-line="42" selection-start-column="1" selection-end-line="42" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -75,10 +81,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>iface</find>
-      <find>addd</find>
-      <find>dockwidgeta</find>
-      <find>apdock</find>
       <find>dockwidget</find>
       <find>dockwidgetare</find>
       <find>layer</find>
@@ -105,6 +107,10 @@
       <find>qgsmapl</find>
       <find>qgsmaplay</find>
       <find>pendingfi</find>
+      <find>fields</find>
+      <find>connec</find>
+      <find>changed</find>
+      <find>def run</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -208,10 +214,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="969" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3349001" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3349001" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -246,7 +253,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#9142#9167#0" expanded="false" />
+            <element signature="e#10369#10394#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -334,6 +341,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pb_tool.cfg">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="42" column="1" lean-forward="false" selection-start-line="42" selection-start-column="1" selection-end-line="42" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/attributepainterdialog.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
@@ -346,19 +361,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/attributepainter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="379">
-          <caret line="169" column="0" lean-forward="true" selection-start-line="169" selection-start-column="0" selection-end-line="169" selection-end-column="0" />
+        <state relative-caret-position="-481">
+          <caret line="86" column="13" lean-forward="false" selection-start-line="86" selection-start-column="8" selection-end-line="86" selection-end-column="13" />
           <folding>
-            <element signature="e#9142#9167#0" expanded="false" />
+            <element signature="e#10369#10394#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pb_tool.cfg">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="43" column="1" lean-forward="false" selection-start-line="43" selection-start-column="1" selection-end-line="43" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
