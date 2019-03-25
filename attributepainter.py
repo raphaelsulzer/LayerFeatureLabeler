@@ -21,19 +21,33 @@
 """
 # Import the PyQt and QGIS libraries
 from qgis.PyQt.QtCore import Qt
-if False:
-    from PyQt4.QtCore import *
-    from PyQt4.QtGui import *
-    from PyQt4 import uic
-    from qgis.core import *
-    from qgis.utils import *
-    from qgis.gui import *
-if True:
-    from qgis.PyQt.QtGui import QColor, QIcon, QBrush
-    from qgis.PyQt.QtWidgets import QComboBox, QDockWidget, QAction, QTableWidgetItem, QApplication, QHeaderView
-    from qgis.PyQt import uic
-    from qgis.core import QgsMapLayer
-    from qgis.gui import QgsRubberBand
+# if False:
+#     from PyQt4.QtCore import *
+#     from PyQt4.QtGui import *
+#     from PyQt4 import uic
+#     from qgis.core import *
+#     from qgis.utils import *
+#     from qgis.gui import *
+#     print('False')
+
+
+try:
+    #QGIS3
+    from qgis.core import Qgis
+except ImportError:
+    #QGIS2
+    from qgis.core import QGis as Qgis
+
+from qgis.PyQt.QtGui import QColor, QIcon, QBrush
+from qgis.PyQt.QtWidgets import QComboBox, QDockWidget, QAction, QTableWidgetItem, QApplication, QHeaderView
+from qgis.PyQt import uic
+from qgis.core import *
+from qgis.gui import QgsRubberBand
+
+#version
+version = int(str(Qgis.QGIS_VERSION[0]))
+
+
 # Import the code for the dialog
 from .attributepainterdialog import attributePainterDialog
 from .identifygeometry import IdentifyGeometry
@@ -80,6 +94,12 @@ class AttributePainterClass:
         self.layerHighlighted = None
         self.sourceFeat = None
 
+
+        #init the combo boxes
+        self.initLayerCombo()
+        self.initAttributeCombo()
+
+
         #setting dock view buttons behavior
         # self.dock.PickSource.toggled.connect(self.setSourceMapTool)
         # self.dock.ResetSource.clicked.connect(self.resetSource)
@@ -115,12 +135,46 @@ class AttributePainterClass:
         # self.resetSource()
         self.actualLayer = None
 
-    def selectAllCheckbox(self):
-        '''
-        select or deselect items in qtablewidget on "select all attributes" checkbox clicked
-        '''
-        for rowTabWidget in range(0,self.dock.tableWidget.rowCount()):
-            self.dock.tableWidget.item(rowTabWidget,0).setCheckState(self.dock.checkBox.checkState())
+
+    def initLayerCombo(self):
+
+        #QGIS2
+        if version == 2:
+            layerList = [layer.name() for layer in QgsMapLayerRegistry.instance().mapLayers().values()]
+        elif version == 3:
+            layerList = [layer.name() for layer in list(QgsProject.instance().mapLayers().values())]
+        else:
+            print('unkown QGIS version')
+
+        #QGIS3
+        #QgsProject.instance().addMapLayer(your_Qgs_whaterver_Layer)
+
+        self.dock.layerCombo.clear()
+        self.dock.layerCombo.addItems(layerList)
+
+        # TODO: select selected layer
+
+    def initAttributeCombo(self):
+
+        #QGIS2
+        layer = self.iface.activeLayer()
+        #fields = layer.pendingFields()
+        fields = layer.fields()
+        fieldList = [field.name() for field in fields]
+        #QGIS3
+        #QgsProject.instance().addMapLayer(your_Qgs_whaterver_Layer)
+
+        self.dock.attributeCombo.clear()
+        self.dock.attributeCombo.addItems(fieldList)
+
+
+
+    # def selectAllCheckbox(self):
+    #     '''
+    #     select or deselect items in qtablewidget on "select all attributes" checkbox clicked
+    #     '''
+    #     for rowTabWidget in range(0,self.dock.tableWidget.rowCount()):
+    #         self.dock.tableWidget.item(rowTabWidget,0).setCheckState(self.dock.checkBox.checkState())
 
     # def initTable(self):
     #     '''

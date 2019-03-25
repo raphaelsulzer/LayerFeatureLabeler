@@ -2,24 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="68deee1d-8dd7-4dd5-ba66-138bd38724d9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/help/build/doctrees/environment.pickle" afterPath="$PROJECT_DIR$/help/build/doctrees/environment.pickle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/help/build/doctrees/index.doctree" afterPath="$PROJECT_DIR$/help/build/doctrees/index.doctree" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/attributepainter.py" afterPath="$PROJECT_DIR$/attributepainter.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/attributepainterdialog.py" afterPath="$PROJECT_DIR$/attributepainterdialog.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/help/build/html/.buildinfo" afterPath="$PROJECT_DIR$/help/build/html/.buildinfo" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/help/build/html/_static/basic.css" afterPath="$PROJECT_DIR$/help/build/html/_static/basic.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/help/build/html/_static/classic.css" afterPath="$PROJECT_DIR$/help/build/html/_static/classic.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/help/build/html/_static/doctools.js" afterPath="$PROJECT_DIR$/help/build/html/_static/doctools.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/help/build/html/_static/documentation_options.js" afterPath="$PROJECT_DIR$/help/build/html/_static/documentation_options.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/help/build/html/_static/searchtools.js" afterPath="$PROJECT_DIR$/help/build/html/_static/searchtools.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/help/build/html/_static/sidebar.js" afterPath="$PROJECT_DIR$/help/build/html/_static/sidebar.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/help/build/html/_static/websupport.js" afterPath="$PROJECT_DIR$/help/build/html/_static/websupport.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/help/build/html/genindex.html" afterPath="$PROJECT_DIR$/help/build/html/genindex.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/help/build/html/index.html" afterPath="$PROJECT_DIR$/help/build/html/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/help/build/html/search.html" afterPath="$PROJECT_DIR$/help/build/html/search.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/help/build/html/searchindex.js" afterPath="$PROJECT_DIR$/help/build/html/searchindex.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pb_tool.cfg" afterPath="$PROJECT_DIR$/pb_tool.cfg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ui_LayerFeatureLabeler.ui" afterPath="$PROJECT_DIR$/ui_LayerFeatureLabeler.ui" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,9 +18,11 @@
       <file leaf-file-name="attributepainter.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/attributepainter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="376">
-              <caret line="435" column="13" lean-forward="true" selection-start-line="435" selection-start-column="13" selection-end-line="435" selection-end-column="13" />
-              <folding />
+            <state relative-caret-position="379">
+              <caret line="169" column="0" lean-forward="true" selection-start-line="169" selection-start-column="0" selection-end-line="169" selection-end-column="0" />
+              <folding>
+                <element signature="e#9142#9167#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -44,7 +30,7 @@
       <file leaf-file-name="attributepainterdialog.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/attributepainterdialog.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
+            <state relative-caret-position="336">
               <caret line="29" column="54" lean-forward="false" selection-start-line="29" selection-start-column="54" selection-end-line="29" selection-end-column="54" />
               <folding>
                 <element signature="e#1136#1145#0" expanded="true" />
@@ -78,8 +64,8 @@
       <file leaf-file-name="pb_tool.cfg" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pb_tool.cfg">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="298">
-              <caret line="41" column="0" lean-forward="true" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+            <state relative-caret-position="315">
+              <caret line="43" column="1" lean-forward="false" selection-start-line="43" selection-start-column="1" selection-end-line="43" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -89,9 +75,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>attributepain</find>
-      <find>icon</find>
-      <find>self.plugin</find>
       <find>iface</find>
       <find>addd</find>
       <find>dockwidgeta</find>
@@ -116,6 +99,12 @@
       <find>tablewidg</find>
       <find>resetsour</find>
       <find>checkonlay</find>
+      <find>try</find>
+      <find>qgsmap</find>
+      <find>list1la</find>
+      <find>qgsmapl</find>
+      <find>qgsmaplay</find>
+      <find>pendingfi</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -143,7 +132,7 @@
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="23" />
     <option name="width" value="1680" />
-    <option name="height" value="485" />
+    <option name="height" value="970" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -256,7 +245,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#9142#9167#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -345,7 +336,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/attributepainterdialog.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
+        <state relative-caret-position="336">
           <caret line="29" column="54" lean-forward="false" selection-start-line="29" selection-start-column="54" selection-end-line="29" selection-end-column="54" />
           <folding>
             <element signature="e#1136#1145#0" expanded="true" />
@@ -355,16 +346,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/attributepainter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="376">
-          <caret line="435" column="13" lean-forward="true" selection-start-line="435" selection-start-column="13" selection-end-line="435" selection-end-column="13" />
-          <folding />
+        <state relative-caret-position="379">
+          <caret line="169" column="0" lean-forward="true" selection-start-line="169" selection-start-column="0" selection-end-line="169" selection-end-column="0" />
+          <folding>
+            <element signature="e#9142#9167#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pb_tool.cfg">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="41" column="0" lean-forward="true" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+        <state relative-caret-position="315">
+          <caret line="43" column="1" lean-forward="false" selection-start-line="43" selection-start-column="1" selection-end-line="43" selection-end-column="1" />
           <folding />
         </state>
       </provider>
