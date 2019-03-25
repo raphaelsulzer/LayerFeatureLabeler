@@ -24,8 +24,11 @@ import os
 
 from qgis.PyQt import QtWidgets, uic
 
+# FORM_CLASS, _ = uic.loadUiType(os.path.join(
+#     os.path.dirname(__file__), 'ui_attributepainter.ui'))
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'ui_attributepainter.ui'))
+    os.path.dirname(__file__), 'ui_LayerFeatureLabeler.ui'))
+
 
 class attributePainterDialog(QtWidgets.QWidget, FORM_CLASS):
     def __init__(self, iface):
