@@ -87,11 +87,14 @@ def isLayerProjected(layer):
 
 
 def getLegendLayerByName(iface, name):
-    layer = None
-    for i in iface.legendInterface().layers():
-        if i.name() == name:
-            layer = i
-    return layer
+
+    return QgsMapLayerRegistry.instance().mapLayersByName(name)[0]
+
+    # layer = None
+    # for i in iface.legendInterface().layers():
+    #     if i.name() == name:
+    #         layer = i
+    # return layer
 
 
 def getCanvasLayerByName(canvas, name):

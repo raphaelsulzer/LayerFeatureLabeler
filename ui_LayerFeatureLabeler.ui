@@ -31,7 +31,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Select Layer</string>
+        <string>Select Layer to edit</string>
        </property>
       </widget>
      </item>
@@ -41,7 +41,7 @@
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Select Attribute-Field </string>
+        <string>Select Attribute-Field to edit</string>
        </property>
       </widget>
      </item>
@@ -51,24 +51,30 @@
      <item>
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Enter Label</string>
+        <string>Select label</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="labelEdit"/>
+      <widget class="QComboBox" name="labelCombo"/>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="paintingButton">
          <property name="text">
           <string>Enable Painting</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="saveButton">
          <property name="text">
           <string>Save</string>
          </property>
@@ -77,17 +83,6 @@
       </layout>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QTextEdit" name="textEdit">
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.SF NS Text'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Once enable painting is activated, the label input is painted to the selected attribute field by double-clicking on a feature in the map canvas.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
    </item>
    <item>
     <spacer name="verticalSpacer">

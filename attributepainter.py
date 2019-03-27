@@ -76,9 +76,24 @@ class AttributePainterClass:
         self.sourceEvid.setColor(colorSource)
         self.sourceEvid.setWidth(3)
 
-        self.loadProjectFile()
+
+        self.dock = attributePainterDialog(self.iface)
 
 
+        #connect signals
+        self.dock.layerCombo.currentIndexChanged.connect(self.layerComboChanged)
+        self.dock.attributeCombo.currentIndexChanged.connect(self.attributeComboChanged)
+        self.dock.labelCombo.currentIndexChanged.connect(self.labelComboChanged)
+
+
+        self.dock.paintingButton.clicked.connect(self.startPainting)
+        self.dock.saveButton.clicked.connect(self.startPainting)
+
+
+        #plugin state
+        self.pluginIsActive = False
+        #painting state
+        self.painting = False
 
 
 
@@ -99,16 +114,16 @@ class AttributePainterClass:
         self.iface.addPluginToMenu(u"&VectorLayerTool", self.action)
 
         #creating dock view intance
-        self.dock = attributePainterDialog(self.iface)
-        self.apdockwidget=QDockWidget("AttributePainter" , self.iface.mainWindow() )
-        self.apdockwidget.setObjectName("AttributePainter")
-        self.apdockwidget.setWidget(self.dock)
+        # self.dock = attributePainterDialog(self.iface)
+        self.dockwidget = QDockWidget("Layer Feature Labeler" , self.iface.mainWindow() )
+        self.dockwidget.setObjectName("Layer Feature Labeler")
+        self.dockwidget.setWidget(self.dock)
         self.layerHighlighted = None
         self.sourceFeat = None
 
 
         #init the combo boxes
-        self.initLayerCombo()
+        # self.initLayerCombo()
 
 
 
@@ -123,14 +138,13 @@ class AttributePainterClass:
         # self.dock.tableWidget.setColumnCount(3)
         # self.initTable()
         #setting interface behaviours
-        self.session = destinationLayerState()
         # try:
         #     #QGIS2 API
         #     self.iface.legendInterface().currentLayerChanged.connect(self.checkOnLayerChange)
         # except:
         #     #QGIS3 API
         #     self.iface.currentLayerChanged.connect(self.checkOnLayerChange)
-        self.iface.addDockWidget( Qt.RightDockWidgetArea, self.apdockwidget )
+        # self.iface.addDockWidget( Qt.RightDockWidgetArea, self.apdockwidget )
         # self.iface.projectRead.connect(self.resetSource)
         # self.iface.newProjectCreated.connect(self.resetSource)
         # self.canvas.mapToolSet.connect(self.toggleMapTool)
@@ -142,23 +156,33 @@ class AttributePainterClass:
         # self.sourceMapTool.geomIdentified.connect(self.setSourceFeature)
         # self.destinationMapTool.geomIdentified.connect(self.setDestinationFeature)
 
-        #Call reset procedure to initialize widget
-        # self.dock.tableWidget.itemChanged.connect(self.highLightCellOverride)
-        # self.resetSource()
-        self.actualLayer = None
 
 
+    def run(self):
+        # show the dockwidget
 
-        #connect signals
-        self.dock.layerCombo.currentIndexChanged.connect(self.layerComboChanged)
+        #self.loadProjectFile()
+        self.initLayerCombo()
 
-    def layerComboChanged(self):
 
-        text = str(self.dock.layerCombo.currentText())
-        activeLayer = uf.getCanvasLayerByName(self.canvas, text)
-        self.iface.setActiveLayer(activeLayer)
+        self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dockwidget)
 
-        self.initAttributeCombo(activeLayer)
+        self.dockwidget.setWindowTitle('Regional Game Mobiele Stad')
+        self.dockwidget.show()
+
+        self.pluginIsActive = True
+
+        #QgsMapLayerRegistry.instance().legendLayersAdded.connect(self.initLayerCombo)
+
+        #QGIS2:
+        if version == 2:
+            QgsMapLayerRegistry.instance().layersRemoved.connect(self.initLayerCombo)
+            QgsMapLayerRegistry.instance().layersAdded.connect(self.initLayerCombo)
+        elif version == 3:
+            QgsProject.instance().layersRemoved.connect(self.initLayerCombo)
+            QgsProject.instance().layersAdded.connect(self.initLayerCombo)
+        else:
+            print('no valid QGIS version')
 
 
     def loadProjectFile(self):
@@ -180,8 +204,52 @@ class AttributePainterClass:
                 scenario_open = True
 
 
+    def layerComboChanged(self):
+
+        if self.painting == True:
+            self.startPainting() # which in fact means quit painting, when the layer is changed
+
+        text = str(self.dock.layerCombo.currentText())
+
+        try:    #this fails if plugin is opened without a layer
+            if version == 2:
+                self.activeLayer = QgsMapLayerRegistry.instance().mapLayersByName(text)[0]      # 0 element because it returns a list
+            elif version == 3:
+                self.activeLayer = QgsProject.instance().mapLayersByName(text)[0]
+        except:
+            return
+
+        # activeLayer = uf.getCanvasLayerByName(self.canvas, text)
+        #activeLayer = uf.getLegendLayerByName(self.canvas, text)
+
+
+
+        self.iface.setActiveLayer(self.activeLayer)
+        self.initAttributeCombo(self.activeLayer)
+
+
+
+    def attributeComboChanged(self):
+
+        activeAttribute = str(self.dock.attributeCombo.currentText())
+        self.activeAttributeID = uf.getFieldIndex(self.activeLayer, activeAttribute)
+
+
+    def labelComboChanged(self):
+
+        self.activeLabel = str(self.dock.labelCombo.currentText())
+
+
     def initLayerCombo(self):
 
+
+        try:
+            self.dock.layerCombo.currentIndexChanged.disconnect(self.layerComboChanged)
+        except:
+            pass
+
+
+        layerList = []
         #QGIS2
         if version == 2:
             layerList = [layer.name() for layer in QgsMapLayerRegistry.instance().mapLayers().values()]
@@ -196,7 +264,13 @@ class AttributePainterClass:
         self.dock.layerCombo.clear()
         self.dock.layerCombo.addItems(layerList)
 
+
+        #set the currently selected layer (for the first time)
         self.layerComboChanged()
+
+
+        self.dock.layerCombo.currentIndexChanged.connect(self.layerComboChanged)
+
 
 
     def initAttributeCombo(self, layer):
@@ -205,24 +279,117 @@ class AttributePainterClass:
 
         #QGIS2
         #fields = layer.pendingFields()
-        if layer:
-            fields = layer.fields()
-        # if version == 2:
-        #     fields = layer.pendingFields()
-        # elif version == 3:
+        # if layer:
         #     fields = layer.fields()
-        # else:
-        #     print('unknown QGIS version')
-            fieldList = [field.name() for field in fields]
-        #QGIS3
-        #QgsProject.instance().addMapLayer(your_Qgs_whaterver_Layer)
+        # # if version == 2:
+        # #     fields = layer.pendingFields()
+        # # elif version == 3:
+        # #     fields = layer.fields()
+        # # else:
+        # #     print('unknown QGIS version')
+        #     fieldList = [field.name() for field in fields]
+        # #QGIS3
+        # #QgsProject.instance().addMapLayer(your_Qgs_whaterver_Layer)
+        #
+        #     self.dock.attributeCombo.clear()
+        #     self.dock.attributeCombo.addItems(fieldList)
 
-            self.dock.attributeCombo.clear()
-            self.dock.attributeCombo.addItems(fieldList)
+        stringFieldNames = []
+        stringFieldIDs = []
+        fields = layer.fields()
+        for field in fields:
+            if field.typeName() == 'String':
+                stringFieldNames.append(field.name())
+                stringFieldIDs.append(fields.indexFromName(field.name()))
+
+
+        #fieldList = uf.getFieldNames(layer)
+        self.dock.attributeCombo.clear()
+        self.dock.attributeCombo.addItems(stringFieldNames)
+
+        #set the currently selected attribute (for the first time)
+        self.attributeComboChanged()
+        #init label combo
+        self.initLabelCombo(layer, stringFieldIDs)
 
 
 
-    # def selectAllCheckbox(self):
+
+
+
+    def initLabelCombo(self, layer, ids):
+
+        # QGIS2
+        # fields = layer.pendingFields()
+        # if layer:
+        #
+        #
+        #
+        # fields = layer.fields()
+        # # if version == 2:
+        # #     fields = layer.pendingFields()
+        # # elif version == 3:
+        # #     fields = layer.fields()
+        # # else:
+        # #     print('unknown QGIS version')
+        # fieldList = [field.name() for field in fields]
+        # # QGIS3
+        # # QgsProject.instance().addMapLayer(your_Qgs_whaterver_Layer)
+        #
+        # self.dock.labelCombo.clear()
+        # self.dock.labelCombo.addItems(fieldList)
+        # ids = uf.getAllFeatureIds(layer)
+        values = []
+        for item in ids:
+            uvals = layer.uniqueValues(item)
+            # I don't want a list of lists but a flat list, that's why I'm doing this
+            for val in uvals:
+                if type(val) is unicode:
+                    if uf.isNumeric(val) == False:
+                        values.append(val)
+        #uniqueValueList = set(values)
+        #print(values)
+        self.dock.labelCombo.clear()
+        self.dock.labelCombo.addItems(values)
+
+        #set the currently selected label (for the first time)
+        self.labelComboChanged()
+
+
+    def startPainting(self):
+
+        # deactivate painting
+        if self.painting == True:
+            self.painting = False
+            self.activeLayer.selectionChanged.disconnect(self.applyLabel)
+            self.dock.paintingButton.setChecked(False)
+            self.iface.actionPan().trigger()
+        #activate painting
+        else:
+            self.painting = True
+            self.activeLayer.selectionChanged.connect(self.applyLabel)
+            self.dock.paintingButton.setChecked(True)
+            self.iface.actionSelect().trigger()
+
+
+        #self.dock.paintingButton.setChecked(True)
+
+        self.iface.mainWindow().findChild(QAction, 'mActionToggleEditing').trigger()
+
+
+        # self.iface.mainWindow().findChild(QAction, 'mActionToggleEditing').activate(True)
+        # self.iface.actionSelect().activate(True)
+
+
+    def applyLabel(self):
+
+        features = self.activeLayer.selectedFeatures()
+
+        for feature in features:
+            self.activeLayer.changeAttributeValue(feature.id(), self.activeAttributeID, self.activeLabel)
+
+
+        # def selectAllCheckbox(self):
     #     '''
     #     select or deselect items in qtablewidget on "select all attributes" checkbox clicked
     #     '''
@@ -514,15 +681,15 @@ class AttributePainterClass:
         processEvents()
         
 
-    def run(self):
-        '''
-        show/hide the widget
-        '''
-        if self.apdockwidget.isVisible():
-            self.apdockwidget.hide()
-            # self.resetSource()
-        else:
-            self.apdockwidget.show()
+    # def run(self):
+    #     '''
+    #     show/hide the widget
+    #     '''
+    #     if self.apdockwidget.isVisible():
+    #         self.apdockwidget.hide()
+    #         # self.resetSource()
+    #     else:
+    #         self.apdockwidget.show()
 
     def unload(self):
         '''
@@ -531,7 +698,7 @@ class AttributePainterClass:
         if self.sourceFeat:
             self.sourceEvid.reset()
         self.iface.removeToolBarIcon(self.action)
-        self.iface.removeDockWidget(self.apdockwidget)
+        self.iface.removeDockWidget(self.dockwidget)
         # self.canvas.mapToolSet.disconnect(self.toggleMapTool)
         # try:
         #     self.iface.legendInterface().currentLayerChanged.disconnect(self.checkOnLayerChange)
@@ -644,6 +811,8 @@ class destinationLayerState:
 
         else:
             return None
+
+
 
 
 
