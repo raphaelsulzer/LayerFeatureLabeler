@@ -387,37 +387,8 @@ class AttributePainterClass:
 
         for feature in features:
             self.activeLayer.changeAttributeValue(feature.id(), self.activeAttributeID, self.activeLabel)
-
-
-        # def selectAllCheckbox(self):
-    #     '''
-    #     select or deselect items in qtablewidget on "select all attributes" checkbox clicked
-    #     '''
-    #     for rowTabWidget in range(0,self.dock.tableWidget.rowCount()):
-    #         self.dock.tableWidget.item(rowTabWidget,0).setCheckState(self.dock.checkBox.checkState())
-
-    # def initTable(self):
-    #     '''
-    #     QTableWidget initialization
-    #     '''
-    #     header = QTableWidgetItem("  ")
-    #     header.setTextAlignment(Qt.AlignLeft)
-    #     self.dock.tableWidget.setHorizontalHeaderItem(0,header)
-    #     header = QTableWidgetItem("FIELD")
-    #     header.setTextAlignment(Qt.AlignLeft)
-    #     self.dock.tableWidget.setHorizontalHeaderItem(1,header)
-    #     header = QTableWidgetItem("VALUE")
-    #     header.setTextAlignment(Qt.AlignLeft)
-    #     self.dock.tableWidget.setHorizontalHeaderItem(2,header)
-    #     # self.dock.tableWidget.resizeColumnsToContents()
-    #     try:
-    #         self.dock.tableWidget.horizontalHeader().setResizeMode(QHeaderView.Stretch)
-    #     except:
-    #         self.dock.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-    #
-    #     self.height = 30
-    #     self.dock.tableWidget.verticalHeader().setDefaultSectionSize(self.height)
-
+            # self.apply_style(feature)
+            self.apply_style(feature)
 
     def setComboField(self,content,type,layer):
         '''
@@ -465,53 +436,6 @@ class AttributePainterClass:
         else:
             return []
 
-    # def selectSource(self):
-    #     '''
-    #     source feature selection procedure
-    #     '''
-    #     if self.layerHighlighted:
-    #         self.resetSource()
-    #     try:
-    #         self.dock.tableWidget.itemChanged.disconnect(self.highLightCellOverride)
-    #     except:
-    #         pass
-    #     #take first selected feature as source feature
-    #     self.sourceFeat = self.selectedFeature
-    #     #hightlight source feature with rubberband
-    #     self.sourceEvid.setToGeometry(self.sourceFeat.geometry(),self.selectedLayer)
-    #     #get current layer attributes labels list
-    #     field_names = self.scanLayerFieldsNames(self.selectedLayer)
-    #     field_types = self.scanLayerFieldsTypes(self.selectedLayer)
-    #     self.sourceAttrsTab=[]
-    #     # self.dock.tableWidget.setRowCount(len(field_names))
-    #     #loading attributes labels and values in QTableWidget
-    #     for n in range(0,len(field_names)):
-    #             item=QTableWidgetItem()
-    #             item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
-    #             item.setCheckState(Qt.Unchecked)
-    #             item.setText("")
-    #             #set first column as checkbox
-    #             self.dock.tableWidget.setItem(n,0,item)
-    #             #set second colunm as attribute label as qcombobox widget
-    #             self.dock.tableWidget.setCellWidget(n,1,self.setComboField(field_names[n],field_types[n],self.canvas.currentLayer()))
-    #             #set third column as attribute value
-    #             item = QTableWidgetItem()
-    #             item.setData(Qt.DisplayRole,self.sourceFeat.attributes()[n])
-    #             self.dock.tableWidget.setItem(n,2,item)
-    #     #resize table to contents
-    #     self.dock.tableWidget.resizeColumnsToContents()
-    #     self.dock.tableWidget.horizontalHeader().setStretchLastSection(True)
-    #     #procedure to recover same field selection if current source feature has the same layer of the precedent one
-    #     if self.selectedLayer.id() != self.activeLayer:
-    #         self.sourceAttrs={}
-    #         self.activeLayer = self.selectedLayer.id()
-    #     else:
-    #         for Attr in self.sourceAttrs:
-    #             self.dock.tableWidget.item(Attr,0).setCheckState(Qt.Checked)
-    #     #Enable button to apply or reset
-    #     self.dock.ResetSource.setEnabled(True)
-    #     self.dock.tableWidget.itemChanged.connect(self.highLightCellOverride)
-    #     self.checkOnLayerChange(self.canvas.currentLayer())
 
     def highLightCellOverride(obj,item):
         '''
@@ -521,58 +445,6 @@ class AttributePainterClass:
             item.setBackground(QBrush(QColor(183,213,225)))
             #item.setForeground (QBrush(QColor(255,0,0)))
 
-    # def toggleMapTool(self,mapTool):
-    #     '''
-    #     landing method on canvas maptool change
-    #     '''
-    #     self.dock.PickSource.blockSignals(True)
-    #     self.dock.PickApply.blockSignals(True)
-    #     if mapTool != self.sourceMapTool and mapTool != self.destinationMapTool:
-    #         self.dock.PickSource.setChecked(False)
-    #         self.dock.PickApply.setChecked(False)
-    #     elif mapTool == self.sourceMapTool:
-    #         self.dock.PickApply.setChecked(False)
-    #     elif mapTool == self.destinationMapTool:
-    #         self.dock.PickSource.setChecked(False)
-    #     self.dock.PickSource.blockSignals(False)
-    #     self.dock.PickApply.blockSignals(False)
-
-    # def checkOnLayerChange(self,cLayer):
-    #     '''
-    #     landing method on current layer change
-    #     '''
-    #     if cLayer and cLayer.type() == QgsMapLayer.VectorLayer:
-    #         self.session.backupState(self.layerHighlighted, self.dock.tableWidget)
-    #         # Restore a session for the current layer or custom table items to it
-    #         if self.layerHighlighted:
-    #             self.layerHighlighted.editingStarted.disconnect(self.checkEditable)
-    #             self.layerHighlighted.editingStopped.disconnect(self.checkEditable)
-    #         if cLayer:
-    #             self.layerHighlighted = cLayer
-    #             self.checkEditable()
-    #             cLayer.editingStarted.connect(self.checkEditable)
-    #             cLayer.editingStopped.connect(self.checkEditable)
-    #         self.session.restoreState(cLayer,self.dock.tableWidget)
-    
-    # def highlightCompatibleFields(self, LayerChange = True):
-    #     '''
-    #     method to highlight compatible field on selected feature (even on different layer)
-    #     '''
-    #     if self.dock.tableWidget.rowCount()>0:
-    #         source_field_names = self.scanLayerFieldsNames(self.selectedLayer)
-    #         source_field_types = self.scanLayerFieldsTypes(self.selectedLayer)
-    #         destination_field_names = self.scanLayerFieldsNames(self.canvas.currentLayer())
-    #         self.dock.tableWidget.itemChanged.disconnect(self.highLightCellOverride)
-    #         for row in range (0,self.dock.tableWidget.rowCount()):
-    #             if LayerChange:
-    #                 self.dock.tableWidget.setCellWidget(row,1,self.setComboField(source_field_names[row],source_field_types[row],self.canvas.currentLayer()))
-    #             if self.dock.tableWidget.cellWidget(row,1).currentText() in destination_field_names:
-    #                 #self.dock.tableWidget.item(row,1).setForeground(QBrush(QColor(0,0,0)))
-    #                 self.dock.tableWidget.item(row,2).setForeground(QBrush(QColor(0,0,0)))
-    #             else:
-    #                 #self.dock.tableWidget.item(row,1).setForeground(QBrush(QColor(130,130,130)))
-    #                 self.dock.tableWidget.item(row,2).setForeground(QBrush(QColor(130,130,130)))
-    #         self.dock.tableWidget.itemChanged.connect(self.highLightCellOverride)
 
     def checkEditable(self):
         '''
@@ -586,35 +458,7 @@ class AttributePainterClass:
             else:
                 self.dock.PickDestination.setDisabled(True)
                 self.dock.PickApply.setDisabled(True)
-    
-    # def resetSource(self):
-    #     '''
-    #     method to clear source and reset attribute table
-    #     '''
-    #     self.dock.tableWidget.itemChanged.disconnect(self.highLightCellOverride)
-    #     self.doReset()
-    #     #if self.canvas.layers()!=[]:
-    #     #    self.iface.activeLayer().removeSelection()
-    #     self.dock.tableWidget.itemChanged.connect(self.highLightCellOverride)
 
-    # def doReset(self):
-    #     '''
-    #     method to clear source and reset attribute table
-    #     '''
-    #     self.dock.PickDestination.setDisabled(True)
-    #     #clear source highlight
-    #     self.sourceEvid.reset()
-    #     #clear source definition
-    #     self.sourceFeat = None
-    #     self.sourceAttrs={}
-    #     self.activeLayer = "nn"
-    #     self.session.removeState(self.canvas.currentLayer())
-    #     self.layerHighlighted = None
-    #     #clear dock widget
-    #     while self.dock.tableWidget.rowCount()>0:
-    #         self.dock.tableWidget.removeRow(0)
-    #     self.dock.PickDestination.setEnabled(False)
-    #     self.dock.ResetSource.setEnabled(False)
 
     def applyToDestination(self):
         '''
@@ -631,17 +475,7 @@ class AttributePainterClass:
             pass
             #print ("nothing selected")
 
-    # def getSourceAttrs(self):
-    #     '''
-    #     rebuild source attribute dict set to apply to destination features
-    #     '''
-    #     sourceAttrs={}
-    #     for rowTabWidget in range(0,self.dock.tableWidget.rowCount()):
-    #         rowCheckbox = self.dock.tableWidget.item(rowTabWidget,0)
-    #         #take only checked attributes
-    #         if rowCheckbox.checkState() == Qt.Checked:
-    #             sourceAttrs.update({rowTabWidget:[self.dock.tableWidget.cellWidget(rowTabWidget,1).currentText(),self.dock.tableWidget.item(rowTabWidget,2).data(Qt.DisplayRole)]})
-    #     return sourceAttrs
+
 
     def applyToFeature(self,feature,sourceSet):
         '''
@@ -657,18 +491,19 @@ class AttributePainterClass:
                 print ('Exception in applyToFeature',e)
             self.highlight(feature.geometry())
 
-    def highlight(self,geometry):
+    def highlight(self,feature):
         def processEvents():
             try:
                 qApp.processEvents()
             except:
                 QApplication.processEvents()
                 
-        highlight = QgsRubberBand(self.canvas, geometry.type())
-        highlight.setColor(QColor("#36AF6C"))
-        highlight.setFillColor(QColor("#36AF6C"))
+        highlight = QgsRubberBand(self.canvas, feature.geometry().type())
+        highlight.setColor(QColor("#f00"))
+        # highlight.setFillColor(QColor("#36AF6C"))
+        highlight.setFillColor(QColor("#f00"))
         highlight.setWidth(2)
-        highlight.setToGeometry(geometry,self.canvas.currentLayer())
+        highlight.setToGeometry(feature.geometry(),self.canvas.currentLayer())
         processEvents()
         sleep(.1)
         highlight.hide()
@@ -681,15 +516,6 @@ class AttributePainterClass:
         processEvents()
         
 
-    # def run(self):
-    #     '''
-    #     show/hide the widget
-    #     '''
-    #     if self.apdockwidget.isVisible():
-    #         self.apdockwidget.hide()
-    #         # self.resetSource()
-    #     else:
-    #         self.apdockwidget.show()
 
     def unload(self):
         '''
@@ -706,113 +532,41 @@ class AttributePainterClass:
         #     self.iface.currentLayerChanged.disconnect(self.checkOnLayerChange)
         # self.iface.projectRead.disconnect(self.resetSource)
 
-    # def setSourceFeature(self, layer, feature):
-    #     '''
-    #     landing method on source maptool identify
-    #     '''
-    #     self.selectedLayer = layer
-    #     self.selectedFeature = feature
-    #     self.dock.PickSource.setChecked(False)
-    #     self.canvas.setMapTool(self.oldMapTool)
-    #     # self.selectSource()
-
-    def setDestinationFeature(self, layer, feature):
-        '''
-        landing method on destination maptool identify
-        '''
-        sourceAttributes = self.getSourceAttrs()
-        self.applyToFeature(feature,sourceAttributes)
-
-    def setSourceMapTool(self, checked):
-        '''
-        landing method on pick source button toggle
-        '''
-        if checked:
-            self.oldMapTool = self.canvas.mapTool()
-            self.canvas.setMapTool(self.sourceMapTool)
-        else:
-            self.oldMapTool = self.canvas.mapTool()
-
-    def setDestinationMapTool(self,checked):
-        '''
-        landing method on pick apply button toggle
-        '''
-        if checked:
-            self.oldMapTool = self.canvas.mapTool()
-            self.canvas.setMapTool(self.destinationMapTool)
-        else:
-            self.canvas.setMapTool(self.oldMapTool)
-
-class destinationLayerState:
-
-    def __init__(self):
-        self.states = {}
-
-    def removeState(self, layer):
-        if layer and layer.id() in self.states.keys():
-            del self.states[layer.id()]
-            return True
-        else:
-            return None
-
-    def backupState(self, layer, table):
-        if layer:
-            stateArray = []
-            for row in range (0,table.rowCount()):
-                checked = table.item(row,0).checkState() == Qt.Checked
-                layersMap = [table.cellWidget(row,1).itemText(i) for i in range(table.cellWidget(row,1).count())]
-                currentLayer = table.cellWidget(row,1).currentIndex()
-                type = table.item(row,2).type()
-                value = table.item(row,2).data(Qt.DisplayRole)
-                isAppliable = table.item(row,2).foreground().color().value() == QColor(0,0,0).value()
-                isOverriden = table.item(row,2).background().color().value() == QColor(183,213,225).value()
-                stateArray.append([checked,layersMap,currentLayer,type,value,isAppliable,isOverriden])
-            self.states[layer.id()] = stateArray
-            #print (self.states)
-
-    def restoreState(self,layer,table):
-        if layer.id() in self.states.keys():
-            table.blockSignals(True)
-            #clear dock widget
-            while table.rowCount()>0:
-                table.removeRow(0)
-            #add rows
-            table.setRowCount(len(self.states[layer.id()]))
-            for n in range(0, len(self.states[layer.id()])):
-                row = self.states[layer.id()][n]
-                #set first column as checkbox
-                item=QTableWidgetItem()
-                item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
-                if row[0]:
-                    item.setCheckState(Qt.Checked)
-                else:
-                    item.setCheckState(Qt.Unchecked)
-                item.setText("")
-                table.setItem(n,0,item)
-                #set second column as combobox
-                combo = QComboBox();
-                combo.addItems(row[1])
-                #print (row[1],row[2])
-                combo.setCurrentIndex(row[2])
-                table.setCellWidget(n,1,combo)
-                #set third column as attribute value
-                item = QTableWidgetItem(row[3])
-                item.setData(Qt.DisplayRole,row[4])
-                if row[5]:
-                    item.setForeground(QBrush(QColor(0,0,0)))
-                else:
-                    item.setForeground(QBrush(QColor(130,130,130)))
-                if row[6]:
-                    item.setBackground(QBrush(QColor(183,213,225)))
-                table.setItem(n,2,item)
-
-            table.blockSignals(False)
-            return True
-
-        else:
-            return None
 
 
 
+    def apply_style(self,feature):
+        # Get currently selected layer in combo box
+        # current_layer = self.dlg.comboBox_layer.currentText()
+        # layer = QgsMapLayerRegistry.instance().mapLayersByName(str(current_layer))[0]
+        layer = self.canvas.currentLayer()
 
+        print("style applied")
 
+        # Define style parameters: value, colour, legend
+        # TODO: get distinct list of possible attribute values and draw the color from a random palette
+        # have to apply this from the very start of loading the layer in the best case, e.g. check if it has a style, and if not, make one
+        # the QgsCategorizedSymbolRenderer(column, categories) https://qgis.org/api/classQgsCategorizedSymbolRenderer.html
+        # also has a clone() method, with wich I could save the original style
+        land_class = {
+            'FLEVOLAND': ('#f00', 'FLEVOLAND'),
+            'ZEELAND': ('#0f0', 'ZEELAND')
+        }
+
+        # Define a list for categories
+        categories = []
+        # Define symbology depending on layer type, set the relevant style parameters
+        for classes, (color, label) in land_class.items():
+            # symbol = QgsRubberBand(self.canvas, feature.geometry().type())
+            symbol = QgsSymbol.defaultSymbol(feature.geometry().type())
+            symbol.setColor(QColor(color))
+            category = QgsRendererCategory(classes, symbol, label)
+            categories.append(category)
+
+        # Column/field name to be used to read values from
+        column = "NAM"
+        # Apply the style rendering
+        renderer = QgsCategorizedSymbolRenderer(column, categories)
+        layer.setRenderer(renderer)
+        # Refresh the layer
+        layer.triggerRepaint()
