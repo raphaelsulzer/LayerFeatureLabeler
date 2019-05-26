@@ -38,7 +38,7 @@ except ImportError:
     #QGIS2
     from qgis.core import QGis as Qgis
 
-from qgis.PyQt.QtGui import QColor, QIcon, QBrush
+from qgis.PyQt.QtGui import QColor, QIcon, QBrush, QImage, QPainter, QPixmap
 from qgis.PyQt.QtWidgets import QComboBox, QDockWidget, QAction, QTableWidgetItem, QApplication, QHeaderView
 from qgis.PyQt import uic
 from qgis.core import *
@@ -58,7 +58,7 @@ from . import utility_functions as uf
 
 # Initialize Qt resources from file resources.py
 import sip
-import os
+import os, random
 from time import sleep
 
 
@@ -121,47 +121,16 @@ class AttributePainterClass:
         self.layerHighlighted = None
         self.sourceFeat = None
 
-
-        #init the combo boxes
-        # self.initLayerCombo()
-
-
-
-        #setting dock view buttons behavior
-        # self.dock.PickSource.toggled.connect(self.setSourceMapTool)
-        # self.dock.ResetSource.clicked.connect(self.resetSource)
-        # self.dock.PickDestination.clicked.connect(self.applyToDestination)
-        # self.dock.PickDestination.setDisabled(True)
-        # self.dock.PickApply.setDisabled(True)
-        # self.dock.PickApply.toggled.connect(self.setDestinationMapTool)
-        # self.dock.checkBox.clicked.connect(self.selectAllCheckbox)
-        # self.dock.tableWidget.setColumnCount(3)
-        # self.initTable()
-        #setting interface behaviours
-        # try:
-        #     #QGIS2 API
-        #     self.iface.legendInterface().currentLayerChanged.connect(self.checkOnLayerChange)
-        # except:
-        #     #QGIS3 API
-        #     self.iface.currentLayerChanged.connect(self.checkOnLayerChange)
-        # self.iface.addDockWidget( Qt.RightDockWidgetArea, self.apdockwidget )
-        # self.iface.projectRead.connect(self.resetSource)
-        # self.iface.newProjectCreated.connect(self.resetSource)
-        # self.canvas.mapToolSet.connect(self.toggleMapTool)
-
         # here the map tool is choosen
         self.sourceMapTool = IdentifyGeometry(self.canvas,pickMode='active')
         self.destinationMapTool = IdentifyGeometry(self.canvas,pickMode='active')
-        # here the feature is selected
-        # self.sourceMapTool.geomIdentified.connect(self.setSourceFeature)
-        # self.destinationMapTool.geomIdentified.connect(self.setDestinationFeature)
 
 
 
     def run(self):
         # show the dockwidget
 
-        #self.loadProjectFile()
+        self.loadProjectFile()
         self.initLayerCombo()
 
 
@@ -233,12 +202,17 @@ class AttributePainterClass:
 
         activeAttribute = str(self.dock.attributeCombo.currentText())
         self.activeAttributeID = uf.getFieldIndex(self.activeLayer, activeAttribute)
+        self.applyStyle()
 
 
     def labelComboChanged(self):
 
         self.activeLabel = str(self.dock.labelCombo.currentText())
 
+
+    def applyStyleChanged(self):
+        #self.applyStyle()
+        pass
 
     def initLayerCombo(self):
 
@@ -302,6 +276,9 @@ class AttributePainterClass:
                 stringFieldNames.append(field.name())
                 stringFieldIDs.append(fields.indexFromName(field.name()))
 
+        # init label combo
+        # do this first so the self.valColTuple is initialised
+        self.initLabelCombo(layer, stringFieldIDs)
 
         #fieldList = uf.getFieldNames(layer)
         self.dock.attributeCombo.clear()
@@ -309,8 +286,7 @@ class AttributePainterClass:
 
         #set the currently selected attribute (for the first time)
         self.attributeComboChanged()
-        #init label combo
-        self.initLabelCombo(layer, stringFieldIDs)
+
 
 
 
@@ -349,11 +325,29 @@ class AttributePainterClass:
                         values.append(val)
         #uniqueValueList = set(values)
         #print(values)
+        self.initColors(values)
+
+        # img=QImage(2, 2, QImage.Format_RGB32);
+        # p=QPainter(img);
+        # p.fillRect(img.rect(), Qt.black);
+        # rect = img.rect().adjusted(1, 1, -1, -1);
+        # p.fillRect(rect, Qt.green)
+
+
+
         self.dock.labelCombo.clear()
-        self.dock.labelCombo.addItems(values)
+        # self.dock.labelCombo.addItems(values)
+        for i,item in enumerate(self.valColTuple):
+            pixmap = QPixmap(16, 16)
+            pixmap.fill(item[1])
+            # self.dock.labelCombo.addItem(item[0])
+            self.dock.labelCombo.insertItem(i,QIcon(pixmap),item[0])
 
         #set the currently selected label (for the first time)
         self.labelComboChanged()
+
+
+
 
 
     def startPainting(self):
@@ -364,6 +358,8 @@ class AttributePainterClass:
             self.activeLayer.selectionChanged.disconnect(self.applyLabel)
             self.dock.paintingButton.setChecked(False)
             self.iface.actionPan().trigger()
+            layer = self.canvas.currentLayer()
+            layer.removeSelection()
         #activate painting
         else:
             self.painting = True
@@ -388,53 +384,7 @@ class AttributePainterClass:
         for feature in features:
             self.activeLayer.changeAttributeValue(feature.id(), self.activeAttributeID, self.activeLabel)
             # self.apply_style(feature)
-            self.apply_style(feature)
-
-    def setComboField(self,content,type,layer):
-        '''
-        returns a qcombobox loaded with compatible field names (depending on selected layer)
-        '''
-        combo = QComboBox();
-        fieldNames = self.scanLayerFieldsNames(layer)
-        fieldTypes = self.scanLayerFieldsTypes(layer)
-        choices = []
-        for n in range(0,len(fieldTypes)):
-            if fieldTypes[n] == type:
-                choices.append(fieldNames[n])
-        combo.addItems(choices)
-        if content in choices:
-            combo.setCurrentIndex(choices.index(content))
-        else:
-            combo.addItem(content)
-            combo.setCurrentIndex(combo.count()-1)
-        combo.activated.connect(lambda: self.highlightCompatibleFields(LayerChange=None))
-        return combo
-
-
-    def getFieldsIterator(self,layer):
-        try:
-            return layer.pendingFields
-        except:
-            return layer.fields
-                
-
-    def scanLayerFieldsNames(self,layer):
-        '''
-        returns fields names as strings list
-        '''
-        if layer:
-            return [field.name() for field in self.getFieldsIterator(layer)()]
-        else:
-            return []
-
-    def scanLayerFieldsTypes(self,layer):
-        '''
-        returns fields types as qvariant list
-        '''
-        if layer:
-            return [field.type() for field in self.getFieldsIterator(layer)()]
-        else:
-            return []
+            # self.apply_style(feature)
 
 
     def highLightCellOverride(obj,item):
@@ -444,37 +394,6 @@ class AttributePainterClass:
         if item.column() == 2:
             item.setBackground(QBrush(QColor(183,213,225)))
             #item.setForeground (QBrush(QColor(255,0,0)))
-
-
-    def checkEditable(self):
-        '''
-        method to enable or disable apply to destination button
-        '''
-        if self.layerHighlighted:
-            self.highlightCompatibleFields()
-            if self.layerHighlighted.isEditable() and self.sourceFeat:
-                self.dock.PickDestination.setEnabled(True)
-                self.dock.PickApply.setEnabled(True)
-            else:
-                self.dock.PickDestination.setDisabled(True)
-                self.dock.PickApply.setDisabled(True)
-
-
-    def applyToDestination(self):
-        '''
-        method to apply selected fields to selected destination features
-        '''
-        if self.canvas.currentLayer().selectedFeatures()!=[]:
-            self.sourceAttributes = self.getSourceAttrs()
-            #apply source attribute values to selected destination features
-            for f in self.canvas.currentLayer().selectedFeatures():
-                self.applyToFeature(f,self.sourceAttributes)
-            self.iface.activeLayer().removeSelection() 
-            self.canvas.currentLayer().triggerRepaint()
-        else:
-            pass
-            #print ("nothing selected")
-
 
 
     def applyToFeature(self,feature,sourceSet):
@@ -533,9 +452,17 @@ class AttributePainterClass:
         # self.iface.projectRead.disconnect(self.resetSource)
 
 
+    def initColors(self, values):
+
+        self.valColTuple = []
+        for i,val in enumerate(values):
+            r = random.randrange(0,256,1)
+            g = random.randrange(0,256,1)
+            b = random.randrange(0,256,1)
+            self.valColTuple.append((val, QColor(r,g,b)))
 
 
-    def apply_style(self,feature):
+    def applyStyle(self):
         # Get currently selected layer in combo box
         # current_layer = self.dlg.comboBox_layer.currentText()
         # layer = QgsMapLayerRegistry.instance().mapLayersByName(str(current_layer))[0]
@@ -547,26 +474,60 @@ class AttributePainterClass:
         # TODO: get distinct list of possible attribute values and draw the color from a random palette
         # have to apply this from the very start of loading the layer in the best case, e.g. check if it has a style, and if not, make one
         # the QgsCategorizedSymbolRenderer(column, categories) https://qgis.org/api/classQgsCategorizedSymbolRenderer.html
-        # also has a clone() method, with wich I could save the original style
-        land_class = {
-            'FLEVOLAND': ('#f00', 'FLEVOLAND'),
-            'ZEELAND': ('#0f0', 'ZEELAND')
-        }
+        # also has a clone() method, with which I could save the original style
 
-        # Define a list for categories
+        # get the current field name from the combo box, which also means refresh that when this is changed
+        # or with a button called "show current labels"
+
+        fieldName = self.dock.attributeCombo.currentText()
+        # idx = layer.fieldNameIndex(self.activeAttributeID)
+        uvals = layer.uniqueValues(self.activeAttributeID)
+
+
+        # print(uvals)
+
+        attributes = []
+        for i,val in enumerate(uvals):
+            r = random.randrange(0,256,1)
+            g = random.randrange(0,256,1)
+            b = random.randrange(0,256,1)
+            attributes.append((val, QColor(r,g,b)))
+
+        # categories = []
+        # for i,attribute in enumerate(attributes):
+        #     symbol = QgsSymbol.defaultSymbol(layer.geometryType())
+        #     # symbol = QgsSymbol.defaultSymbol(feature.geometry().type())
+        #     symbol.setColor(attribute[1])
+        #     category = QgsRendererCategory(attribute[0], symbol, attribute[0])
+        #     categories.append(category)
+
         categories = []
-        # Define symbology depending on layer type, set the relevant style parameters
-        for classes, (color, label) in land_class.items():
-            # symbol = QgsRubberBand(self.canvas, feature.geometry().type())
-            symbol = QgsSymbol.defaultSymbol(feature.geometry().type())
-            symbol.setColor(QColor(color))
-            category = QgsRendererCategory(classes, symbol, label)
+        for i,attribute in enumerate(self.valColTuple):
+            symbol = QgsSymbol.defaultSymbol(layer.geometryType())
+            # symbol = QgsSymbol.defaultSymbol(feature.geometry().type())
+            symbol.setColor(attribute[1])
+            category = QgsRendererCategory(attribute[0], symbol, attribute[0])
             categories.append(category)
+
+        # land_class = {
+        #     'FLEVOLAND': ('#f00', 'FLEVOLAND'),
+        #     'ZEELAND': ('#0f0', 'ZEELAND')
+        # }
+        # Define a list for categories
+        # categories = []
+        # Define symbology depending on layer type, set the relevant style parameters
+        # for classes, (color, label) in land_class.items():
+        #     # symbol = QgsRubberBand(self.canvas, feature.geometry().type())
+        #     symbol = QgsSymbol.defaultSymbol(feature.geometry().type())
+        #     symbol.setColor(QColor(color))
+        #     category = QgsRendererCategory(classes, symbol, label)
+        #     categories.append(category)
 
         # Column/field name to be used to read values from
         column = "NAM"
         # Apply the style rendering
-        renderer = QgsCategorizedSymbolRenderer(column, categories)
+        # renderer = QgsCategorizedSymbolRenderer(column, categories)
+        renderer = QgsCategorizedSymbolRenderer(fieldName, categories)
         layer.setRenderer(renderer)
         # Refresh the layer
         layer.triggerRepaint()
