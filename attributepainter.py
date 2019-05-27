@@ -162,7 +162,6 @@ class AttributePainterClass:
         if self.painting == True:
             self.iface.mainWindow().findChild(QAction, 'mActionToggleEditing').trigger()
             self.painting == False
-            print("closing plugin")
 
         self.dock.closingPlugin.disconnect(self.onClosePlugin)
 
@@ -280,7 +279,6 @@ class AttributePainterClass:
                     if uf.isNumeric(val) == False:
                         values.append(val)
         values = set(values)
-        print(values)
 
         ## initialize color list
         self.initColors(values)
