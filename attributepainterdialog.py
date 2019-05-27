@@ -23,14 +23,15 @@
 import os
 
 from qgis.PyQt import QtWidgets, uic
+from qgis.PyQt.QtCore import pyqtSignal
 
-# FORM_CLASS, _ = uic.loadUiType(os.path.join(
-#     os.path.dirname(__file__), 'ui_attributepainter.ui'))
+
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui_LayerFeatureLabeler.ui'))
 
 
 class attributePainterDialog(QtWidgets.QWidget, FORM_CLASS):
+    closingPlugin = pyqtSignal()
     def __init__(self, iface):
         QtWidgets.QWidget.__init__(self)
         self.setupUi(self)

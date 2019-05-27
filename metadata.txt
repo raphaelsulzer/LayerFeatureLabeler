@@ -7,7 +7,6 @@
 
 # Mandatory items:
 
-
 [general]
 name=Layer Feature Labeler
 qgisMinimumVersion=2.18
@@ -22,30 +21,24 @@ email=raphaelsulzer@gmx.de
 # Optional items:
 
 # Uncomment the following line and add your changelog entries:
-changelog=5.1 QGIS3 unknown method issue fixed
- highlight feature on applying attributes
+changelog=coloring added
 
-about=Attribute Painter usage:
- 1) Click on "Pick source feature" and select a sample feature on map.
- 2) On the table below will appears a selection list for attributes to be applied.
- 3) Check the attributes to be copied.
- 4) If necessary override source attributes values editing cells
- 5) If necessary remap destination field between those available in field combobox
- 6) Select destination features
- 7) Click on "Apply to selection" to apply attributes to selected features"
- or
- 6) Click on "Pick to Apply" to apply attributes to features one by one
- otherwise
- 8) Click "Reset source" to clear source selection
- 
- Attributes settings are now persistent changing between layers
+about=Layer Feature Labeler usage:
+ 1) Select the layer you want to edit
+ 2) Select the attribute field you want to edit
+ 3) Select the label you want to apply
+ 4) Click on "Enable Painting" to start the labelling process
+ 5) Select one or several features on the map to apply the selected label
+ 6) You can change the label or attribute field during the editing process
+ 7) Once you are finished with editing a layer click on "Save"
+ 8) The changes will be saved to the layer
 
 # tags are comma separated with spaces allowed
 tags = fields, attributes, copy, replication, vector, layer, apply, edit, table
 
-homepage=http://geogear.wordpress.com/
-tracker=https://github.com/enricofer/attributepainter/issues
-repository=https://github.com/enricofer/attributepainter/
+homepage=https://www.linkedin.com/in/raphael-sulzer/
+tracker=https://github.com/raphaelsulzer
+repository=https://github.com/raphaelsulzer
 icon=icons/select2.png
 # experimental flag
 experimental=False
