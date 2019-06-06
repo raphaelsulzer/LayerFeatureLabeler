@@ -136,7 +136,7 @@ class AttributePainterClass:
 
         self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dockwidget)
 
-        self.dockwidget.setWindowTitle('Regional Game Mobiele Stad')
+        self.dockwidget.setWindowTitle('Layer Feature Labeler')
         self.dockwidget.show()
 
         self.pluginIsActive = True
@@ -236,6 +236,7 @@ class AttributePainterClass:
             print('unkown QGIS version')
 
         self.dock.layerCombo.clear()
+        layerList.insert(0,'')
         self.dock.layerCombo.addItems(layerList)
 
         #set the currently selected layer (for the first time)
@@ -262,6 +263,7 @@ class AttributePainterClass:
 
         #fieldList = uf.getFieldNames(layer)
         self.dock.attributeCombo.clear()
+        stringFieldNames.insert(0,'')
         self.dock.attributeCombo.addItems(stringFieldNames)
 
         #set the currently selected attribute (for the first time)
@@ -277,14 +279,16 @@ class AttributePainterClass:
             for val in uvals:
                 if type(val) is unicode:
                     if uf.isNumeric(val) == False:
-                        values.append(val)
-        values = set(values)
+                        if any(char.isdigit() for char in val) == False:
+                            values.append(val)
+        values = sorted(set(values))
 
         ## initialize color list
         self.initColors(values)
 
         self.dock.labelCombo.clear()
         # self.dock.labelCombo.addItems(values)
+
         for i,item in enumerate(self.valColTuple):
             pixmap = QPixmap(16, 16)
             pixmap.fill(item[1])
