@@ -21,11 +21,26 @@
  ***************************************************************************/
 """
 from builtins import str
+
+
+
+
 from qgis.PyQt import QtGui, QtCore
 from qgis.core import *
 
+try:
+    #QGIS3
+    from qgis.core import Qgis
+except ImportError:
+    #QGIS2
+    from qgis.core import QGis as Qgis
+
+# get QGIS version (returns 2 or 3 (as int))
+version = int(str(Qgis.QGIS_VERSION[0]))
+
 import os.path
 import processing
+
 
 
 #
@@ -88,7 +103,14 @@ def isLayerProjected(layer):
 
 def getLegendLayerByName(iface, name):
 
-    return QgsMapLayerRegistry.instance().mapLayersByName(name)[0]
+
+    if version == 2:
+        layer = QgsMapLayerRegistry.instance().mapLayersByName(name)[
+            0]  # 0 element because it returns a list
+    elif version == 3:
+        layer = QgsProject.instance().mapLayersByName(name)[0]
+
+    return layer
 
     # layer = None
     # for i in iface.legendInterface().layers():
