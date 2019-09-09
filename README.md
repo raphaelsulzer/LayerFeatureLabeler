@@ -12,13 +12,13 @@ A QGIS plugin (for QGIS 2.xx and 3.xx) to label vector layer features.
 
 4. Navigate to the ZIP file you just downloaded and open it
 
-5. The plugin is ready to use and can be opened by clicking on the _hand icon_
+5. The plugin is ready to use and can be opened by clicking on its icon
 ![alt text](https://raw.githubusercontent.com/raphaelsulzer/LayerFeatureLabeler/master/icons/select2.png?token=AEDVDXFNOV6XXTJ6CHPMAZC5QAAME)
+or via _Plugins > VectorLayerTool > LayerFeatureLabeler_
 
 ## How to use the plugin
 
-
-
+![alt text](https://raw.githubusercontent.com/raphaelsulzer/LayerFeatureLabeler/master/GUI.png?token=AEDVDXGNJCMZYZAL4D3XXSC5QAB7I)
 
 Simply select a layer, an attribute-field and a label. 
 To apply the label to a feature, first click on _Enable Painting_ and paint
